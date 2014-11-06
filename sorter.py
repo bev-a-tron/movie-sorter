@@ -1,10 +1,4 @@
 class Movie:
-	id = ""
-	title = ""
-	year = ""
-	length = ""
-	genre = ""
-	language = ""
 
 	def __init__(self, id = "", title = "", year = "", length_in_minutes = "", genre = "", language = ""):
 		self.id = id
