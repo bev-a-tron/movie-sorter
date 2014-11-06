@@ -14,9 +14,30 @@ class Movie:
 		self.genre = genre
 		self.language = language
 
+class MovieList(list):
+
+	def __init__(self):
+		self.movies = []
+
+	def append(self, movie):
+		self.movies.append(movie)
+
+	def print_titles(self):
+		for i, movie in enumerate(self.movies):
+			print movie.year, ": ", movie.title, "(%u)"%int(movie.length_in_minutes), ": ", movie.genre, ": ", movie.language
+
+	def filter_out_length_shorter_than(self, minutes):
+		self.movies = [movie for movie in self.movies if int(movie.length_in_minutes) > 70]
+
+	def filter_out_genre(self, genre):
+		self.movies = [movie for movie in self.movies if genre not in movie.genre]
+
+	def filter_in_language(self, language):
+		self.movies = [movie for movie in self.movies if movie.language in language]
+
 def file_parser(filename):
 	file = open(filename)
-	movies = []
+	movies = MovieList()
 	for line in file:
 		movie_info = line.split("\t");
 		id = movie_info[0]
@@ -31,28 +52,10 @@ def file_parser(filename):
 		movies.append(this_movie)
 	return movies
 
-def print_movie_titles(movies):
-	for i, movie in enumerate(movies):
-		print movie.year, ": ", movie.title, "(%u)"%int(movie.length_in_minutes), ": ", movie.genre, ": ", movie.language
-
-def filter_out_length_shorter_than(movies, minutes):
-	return [movie for movie in movies if int(movie.length_in_minutes) > 70]
-
-def filter_out_genre(movies, genre):
-	return [movie for movie in movies if genre not in movie.genre]
-
-def filter_in_language(movies, language):
-	return [movie for movie in movies if movie.language in language]
 
 if __name__ == "__main__":
 	movies = file_parser("omdbextract.txt")
-	print_movie_titles(movies)
-	
-	long_movies = filter_out_length_shorter_than(movies, 70)
-	print_movie_titles(long_movies)
-
-	no_animation_movies = filter_out_genre(movies, "Animation")
-	print_movie_titles(no_animation_movies)
-	
-	english_only_movies = filter_in_language(movies, "English")
-	print_movie_titles(english_only_movies)
+	movies.filter_out_length_shorter_than(70)
+	movies.filter_out_genre("Animation")
+	movies.filter_in_language("English")
+	movies.print_titles()
