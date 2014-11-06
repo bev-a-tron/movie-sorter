@@ -10,5 +10,11 @@ class TestSorter(unittest.TestCase):
 		self.assertEqual(movies[-1].title, "Autopsie d'un mariage blanc")
 		self.assertEqual(movies[-2].title, "En la caja")
 
+	def test_should_only_show_movies_less_than_70_mins(self):
+		movies = sorter.file_parser("omdbextract.txt")
+		short_movies = sorter.length_over(movies, 70)
+		for movie in short_movies:
+			self.assertTrue(int(movie.length_in_minutes) > 70)
+
 if __name__ == "__main__":
 	unittest.main()
